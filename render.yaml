@@ -1,0 +1,32 @@
+services:
+  - type: worker
+    name: cobol-support-agent
+    env: python
+    plan: free
+    buildCommand: |
+      pip install --no-cache-dir -r requirements.txt
+    startCommand: |
+      python app.py
+    envVars:
+      - key: IMAP_HOST
+        sync: false
+      - key: IMAP_PORT
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: MAIL_USER
+        sync: false
+      - key: MAIL_PASS
+        sync: false
+      - key: FOLDER_PROCESSED
+        value: Respondidos
+      - key: FOLDER_ESCALATE
+        value: Escalar
+      - key: CHECK_INTERVAL_SECONDS
+        value: "60"
+      - key: CONFIDENCE_THRESHOLD
+        value: "0.65"
+      - key: LLM_BACKEND
+        value: template
