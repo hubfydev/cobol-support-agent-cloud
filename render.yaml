@@ -3,23 +3,27 @@ services:
     name: cobol-support-agent
     env: python
     plan: free
+    autoDeploy: true
     buildCommand: |
       pip install --no-cache-dir -r requirements.txt
     startCommand: |
       python app.py
     envVars:
+      # ==== Coloque seus segredos direto na UI da Render (NÃO faça commit do .env) ====
       - key: IMAP_HOST
         sync: false
       - key: IMAP_PORT
-        sync: false
+        value: "993"
       - key: SMTP_HOST
         sync: false
       - key: SMTP_PORT
-        sync: false
+        value: "465"
       - key: MAIL_USER
         sync: false
       - key: MAIL_PASS
         sync: false
+
+      # Pastas & comportamento
       - key: FOLDER_PROCESSED
         value: Respondidos
       - key: FOLDER_ESCALATE
@@ -28,5 +32,13 @@ services:
         value: "60"
       - key: CONFIDENCE_THRESHOLD
         value: "0.65"
+
+      # Backend em modo TEMPLATE (sem LLM)
       - key: LLM_BACKEND
         value: template
+
+      # Logs e segurança na movimentação
+      - key: LOG_LEVEL
+        value: info         # mude para "debug" se quiser mais detalhes
+      - key: EXPUNGE_AFTER_COPY
+        value: "false"      # deixe false até confirmar que as cópias funcionam
