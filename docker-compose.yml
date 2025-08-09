@@ -1,0 +1,8 @@
+
+version: "3.9"
+services:
+  cobol-support-agent:
+    build: .
+    env_file:
+      - .env
+    restart: unless-stopped

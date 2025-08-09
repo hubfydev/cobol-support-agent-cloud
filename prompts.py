@@ -13,6 +13,9 @@ Saída em JSON estrito:
   "nivel_confianca": 0.0,
   "acao": "responder" | "escalar"
 }
+
+- Retorne SOMENTE um objeto JSON válido (sem ```), com strings sem quebras de linha cruas (use \\n).
+
 """
 
 USER_TEMPLATE = """Remetente: {from_addr}
