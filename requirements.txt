@@ -1,3 +1,7 @@
 python-dotenv==1.0.1
 markdown==3.6
 requests==2.32.3
+
+# Gmail OAuth
+google-auth==2.34.0
+google-auth-oauthlib==1.2.1
