@@ -1,55 +1,59 @@
 services:
-  - type: worker
+  - type: web
     name: cobol-support-agent
     env: python
     plan: free
-    region: oregon
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "python app.py"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: PORT
+        value: 10000
+      # Configurações IMAP HostGator
       - key: IMAP_HOST
-        value: mail.aprendacobol.com.br
+        sync: false
       - key: IMAP_PORT
         value: "993"
       - key: MAIL_USER
-        value: suporte@aprendacobol.com.br
+        sync: false
       - key: MAIL_PASS
-        sync: false      # defina no painel após o primeiro deploy
-
+        sync: false
+      # Configuração Gmail OAuth
       - key: SMTP_MODE
         value: gmail_oauth
       - key: GMAIL_EMAIL
-        value: aprendacobol@gmail.com
+        sync: false
       - key: GOOGLE_CLIENT_SECRET_FILE
-        value: /opt/render/credentials.json
+        value: credentials.json
       - key: GOOGLE_TOKEN_FILE
-        value: /opt/render/token.json
-
-      - key: LLM_BACKEND
-        value: ollama
-      - key: OLLAMA_MODEL
-        value: llama3.1:8b
-      - key: OLLAMA_HOST
-        value: http://127.0.0.1:11434
-
+        value: token.json
+      # Comportamento
+      - key: CHECK_INTERVAL_SECONDS
+        value: "60"
       - key: FOLDER_PROCESSED
         value: Respondidos
       - key: FOLDER_ESCALATE
         value: Escalar
-      - key: SENT_FOLDER
-        value: Sent
-      - key: CHECK_INTERVAL_SECONDS
-        value: "60"
       - key: CONFIDENCE_THRESHOLD
         value: "0.65"
+      - key: SENT_FOLDER
+        value: INBOX.Sent
       - key: EXPUNGE_AFTER_COPY
-        value: "true"
+        value: "false"
       - key: LOG_LEVEL
-        value: debug
-
+        value: info
+      # Assinatura
       - key: SIGNATURE_NAME
-        value: "Equipe Aprenda COBOL — Suporte"
+        value: Equipe Aprenda COBOL — Suporte
       - key: SIGNATURE_FOOTER
-        value: "Se precisar, responda este e-mail com mais detalhes ou anexe seu arquivo .COB/.CBL.\\nHorário de atendimento: 9h–18h (ET), seg–sex."
+        value: Se precisar, responda este e-mail com mais detalhes ou anexe seu arquivo .COB/.CBL. Horário de atendimento: 9h–18h (ET), seg–sex.
       - key: SIGNATURE_LINKS
-        value: "https://aprendacobol.com.br/assinatura/"
+        value: ""
+      # LLM local
+      - key: LLM_BACKEND
+        value: ollama
+      - key: OLLAMA_HOST
+        value: http://127.0.0.1:11434
+      - key: OLLAMA_MODEL
+        value: llama3.1:8b
