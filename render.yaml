@@ -3,42 +3,53 @@ services:
     name: cobol-support-agent
     env: python
     plan: free
-    autoDeploy: true
-    buildCommand: |
-      pip install --no-cache-dir -r requirements.txt
-    startCommand: |
-      python app.py
+    region: oregon
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
     envVars:
-      # ==== Coloque seus segredos direto na UI da Render (NÃO faça commit do .env) ====
       - key: IMAP_HOST
-        sync: false
+        value: mail.aprendacobol.com.br
       - key: IMAP_PORT
         value: "993"
-      - key: SMTP_HOST
-        sync: false
-      - key: SMTP_PORT
-        value: "465"
       - key: MAIL_USER
-        sync: false
+        value: suporte@aprendacobol.com.br
       - key: MAIL_PASS
-        sync: false
+        sync: false      # defina no painel após o primeiro deploy
 
-      # Pastas & comportamento
+      - key: SMTP_MODE
+        value: gmail_oauth
+      - key: GMAIL_EMAIL
+        value: aprendacobol@gmail.com
+      - key: GOOGLE_CLIENT_SECRET_FILE
+        value: /opt/render/credentials.json
+      - key: GOOGLE_TOKEN_FILE
+        value: /opt/render/token.json
+
+      - key: LLM_BACKEND
+        value: ollama
+      - key: OLLAMA_MODEL
+        value: llama3.1:8b
+      - key: OLLAMA_HOST
+        value: http://127.0.0.1:11434
+
       - key: FOLDER_PROCESSED
         value: Respondidos
       - key: FOLDER_ESCALATE
         value: Escalar
+      - key: SENT_FOLDER
+        value: Sent
       - key: CHECK_INTERVAL_SECONDS
         value: "60"
       - key: CONFIDENCE_THRESHOLD
         value: "0.65"
-
-      # Backend em modo TEMPLATE (sem LLM)
-      - key: LLM_BACKEND
-        value: template
-
-      # Logs e segurança na movimentação
-      - key: LOG_LEVEL
-        value: info         # mude para "debug" se quiser mais detalhes
       - key: EXPUNGE_AFTER_COPY
-        value: "false"      # deixe false até confirmar que as cópias funcionam
+        value: "true"
+      - key: LOG_LEVEL
+        value: debug
+
+      - key: SIGNATURE_NAME
+        value: "Equipe Aprenda COBOL — Suporte"
+      - key: SIGNATURE_FOOTER
+        value: "Se precisar, responda este e-mail com mais detalhes ou anexe seu arquivo .COB/.CBL.\\nHorário de atendimento: 9h–18h (ET), seg–sex."
+      - key: SIGNATURE_LINKS
+        value: "https://aprendacobol.com.br/assinatura/"
